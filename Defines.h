@@ -16,6 +16,7 @@
 #include <QBitmap>
 #include <QString>
 #include <QSettings>
+//#include <Qpalette>
 
 #include <string>
 #include <vector>

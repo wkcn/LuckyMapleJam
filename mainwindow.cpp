@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //QPalette pal =ui->pushButton->palette();
+    //pal.setColor(QPalette::ButtonText,QColor(255,255,255));
+    //ui->pushButton->setPalette(pal);
+
     //读取配置
     QString iniFilePath = GetFileDir("Data\\config.ini");
     //qDebug("%s",iniFilePath.toStdString().c_str());
@@ -18,13 +22,15 @@ MainWindow::MainWindow(QWidget *parent) :
     int height = iniSetting.value("LuckyMapleJam/Height","768").toInt();
     aniLen = iniSetting.value("LuckyMapleJam/AnimationTime","18").toInt();
 
+    //ui->logoPic->hide();
     QString logo = iniSetting.value("LuckyMapleJam/Logo","logo.png").toString();
     int logoX = iniSetting.value("LuckyMapleJam/LogoX","0").toInt();
     int logoY = iniSetting.value("LuckyMapleJam/LogoY","0").toInt();
 
     QString background = iniSetting.value("LuckyMapleJam/Background","back.png").toString();
-    int bgX = iniSetting.value("LuckyMapleJam/BackgroundX","0").toInt();
-    int bgY = iniSetting.value("LuckyMapleJam/BackgroundY","0").toInt();
+    backPic = QPixmap(GetFileDir("Data\\Pic\\" + background));
+    bgX = iniSetting.value("LuckyMapleJam/BackgroundX","0").toInt();
+    bgY = iniSetting.value("LuckyMapleJam/BackgroundY","0").toInt();
 
     QString resetText = iniSetting.value("LuckyMapleJam/ResetText","Reset").toString();
     int resetX = iniSetting.value("LuckyMapleJam/ResetX","0").toInt();
@@ -45,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->logoPic->setPixmap(QPixmap(GetFileDir("Data\\Pic\\" + logo)));
     ui->logoPic->move(logoX,logoY);
-    ui->backgroundPic->setPixmap(QPixmap(GetFileDir("Data\\Pic\\" + background)));
+    //ui->backgroundPic->setPixmap(QPixmap(GetFileDir("Data\\Pic\\" + background)));
     ui->backgroundPic->move(bgX,bgY);
     ui->pushButton_2->setText(resetText);
     ui->pushButton_2->move(resetX,resetY);
@@ -75,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     state = START;
     truthNum = 0;
-    box = QPixmap(GetFileDir("box.png"));
+    box = QPixmap(GetFileDir("Data\\Pic\\box.png"));
 
 
     QTimer *timer = new QTimer(this);
@@ -137,19 +143,23 @@ void MainWindow::paintEvent(QPaintEvent *){
     QPainter painter;
 
     painter.begin(this);
+    //painter.setPen(QPen(Qt::white));
+
+    painter.drawPixmap(bgX,bgY,backPic);
+
     //state = RESULT;
     if (state == START){
-        painter.drawText(320,0,500,200,Qt::AlignBottom,"抽奖环节");
+        painter.drawText(320,0,1000,200,Qt::AlignBottom,"抽奖环节");
     }else if (state == RANDOM || state == RANDOMRESWAIT || state == RANDOMRES || state == WAITVIEW){
         People p = peo[cup];
         char text[256];
         sprintf(text,"%s%s",p.flag.c_str(),p.arr.c_str());
-        painter.drawText(300,0,500,200,Qt::AlignBottom,text);
+        painter.drawText(300,0,1000,200,Qt::AlignBottom,text);
         painter.drawPixmap(335,250,320,120,box);
         string str = PrintNum(truthNum,truthView);
-        painter.drawText(410,250,320,120,Qt::AlignBottom,str.c_str());
+        painter.drawText(410,250,1000,120,Qt::AlignBottom,str.c_str());
     }else if(state == RESULT){
-        painter.drawText(320,0,500,200,Qt::AlignBottom,"中奖名单");
+        painter.drawText(320,0,1000,200,Qt::AlignBottom,"中奖名单");
         string name;
         int total = int(peo.size());
         int xgap = 140;
@@ -166,12 +176,12 @@ void MainWindow::paintEvent(QPaintEvent *){
                 y+=ygap+18;
                 font.setPointSize(40);
                 painter.setFont(font);
-                painter.drawText(x,y,500,200,Qt::AlignBottom,name.c_str());
+                painter.drawText(x,y,1000,200,Qt::AlignBottom,name.c_str());
                 y+=ygap;
             }
             font.setPointSize(35);
             painter.setFont(font);
-            painter.drawText(45+x,y,500,200,Qt::AlignBottom,p.sid.c_str());
+            painter.drawText(45+x,y,1000,200,Qt::AlignBottom,p.sid.c_str());
             x += xgap;
         }
         font.setPointSize(28);

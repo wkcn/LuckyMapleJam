@@ -30,11 +30,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QPixmap box;
+    QPixmap backPic;
     STATE state;
     string PrintNum(int value,int w);
     int maxNum;
     int truthNum;
     int truthView;
+    int bgX,bgY;
     int aniLen;
     vector<People> peo;
     set<int> haveGot;
