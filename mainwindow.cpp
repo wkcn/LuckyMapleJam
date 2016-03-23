@@ -195,7 +195,10 @@ void MainWindow::paintEvent(QPaintEvent *){
 int MainWindow::GetNewNum(){
     while(true){
         bool can = true;
-        int i = rand() % maxNum + 1;
+        int r = rand();
+        int maxr = RAND_MAX / maxNum * maxNum;
+        if (r > maxr - 1)continue;
+        int i = r % maxNum + 1;
         /*
         for(auto p:peo){
             if(p.id == i){

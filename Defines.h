@@ -30,7 +30,7 @@ using namespace std;
 QDir directoryOf(const QString &subdir);
 QString GetFileDir(QString file);
 
-#pragma execution_character_set("utf-8")
+//#pragma execution_character_set("utf-8")
 
 struct People{
     string sid;//id的三位数表示形式
