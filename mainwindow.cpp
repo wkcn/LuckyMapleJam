@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->pushButton->setPalette(pal);
 
     //读取配置
-    QString iniFilePath = GetFileDir("Data\\config.ini");
+    QString iniFilePath = GetFileDir("Data/config.ini");
     //qDebug("%s",iniFilePath.toStdString().c_str());
     QSettings iniSetting(iniFilePath,QSettings::IniFormat);
     iniSetting.setIniCodec("UTF-8");
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     int logoY = iniSetting.value("LuckyMapleJam/LogoY","0").toInt();
 
     QString background = iniSetting.value("LuckyMapleJam/Background","back.png").toString();
-    backPic = QPixmap(GetFileDir("Data\\Pic\\" + background));
+    backPic = QPixmap(GetFileDir("Data/Pic/" + background));
     bgX = iniSetting.value("LuckyMapleJam/BackgroundX","0").toInt();
     bgY = iniSetting.value("LuckyMapleJam/BackgroundY","0").toInt();
 
@@ -49,19 +49,16 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setMinimumSize(width,height);
     this->setMaximumSize(width,height);
 
-    ui->logoPic->setPixmap(QPixmap(GetFileDir("Data\\Pic\\" + logo)));
+    ui->logoPic->setPixmap(QPixmap(GetFileDir("Data/Pic/" + logo)));
     ui->logoPic->move(logoX,logoY);
-    //ui->backgroundPic->setPixmap(QPixmap(GetFileDir("Data\\Pic\\" + background)));
     ui->backgroundPic->move(bgX,bgY);
     ui->pushButton_2->setText(resetText);
     ui->pushButton_2->move(resetX,resetY);
     ui->pushButton->move(clickX,clickY);
     if (!haveReset)ui->pushButton_2->hide();
 
-    //qDebug("%s--%d--",prizes.toStdString().c_str(),maxNum);
     QStringList pList = prizes.split("]");
     for(auto &str:pList){
-        //qDebug("%s==",str.toStdString().c_str());
         QStringList ls = str.split("[");
         if (ls.size() != 2)continue;
         string temp = ls[0].toStdString();
@@ -81,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     state = START;
     truthNum = 0;
-    box = QPixmap(GetFileDir("Data\\Pic\\box.png"));
+    box = QPixmap(GetFileDir("Data/Pic/box.png"));
 
 
     QTimer *timer = new QTimer(this);
@@ -105,7 +102,7 @@ void MainWindow::timerUpDate(){
         }
         if(aniTime >= (1+2+2) * aniLen){
             truthView = 3;
-            if(cup+1 < peo.size()){
+            if(cup+1 < int(peo.size())){
                 state = RANDOMRES;
                 ui->pushButton->setText("下一个");
             }else{
@@ -235,7 +232,7 @@ void MainWindow::on_pushButton_clicked(){
 
     }else if(state == RANDOMRES){
         //下一个
-        if(cup+1 < peo.size())cup ++;
+        if(cup+1 < int(peo.size()))cup ++;
         STRAND();
     }else if(state == WAITVIEW){
         state = RESULT;
